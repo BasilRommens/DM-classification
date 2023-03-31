@@ -1,2 +1,5 @@
 pandas
-pyopenxl
+openpyxl
+pyarrow
+fastparquet
+scikit-learn
