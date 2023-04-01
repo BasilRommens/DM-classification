@@ -1,7 +1,8 @@
 from sklearn.neighbors import KNeighborsClassifier
 
-from src.clean import remove_rowid, change_class, dummify
+from src.clean import remove_rowid, change_class
 from src.dataset_split import get_stratified_split
+from src.encode import dummify
 from src.impute import DataFrameImputer
 from src.read import read_parquet
 

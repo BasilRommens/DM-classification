@@ -1,6 +1,3 @@
-from sklearn.impute import KNNImputer
-import pandas as pd
-
 from src.impute import DataFrameImputer
 from src.read import read_parquet
 
@@ -12,15 +9,6 @@ def remove_rowid(df):
     :return: a dataframe without the rowid
     """
     return df.drop('RowID', axis=1)
-
-
-def dummify(df):
-    """
-    Dummify the dataframe
-    :param df: the dataframe to dummify
-    :return: a dummified dataframe
-    """
-    return pd.get_dummies(df)
 
 
 def change_class(df):
