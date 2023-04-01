@@ -12,7 +12,8 @@ from src.read import read_parquet
 class DataFrameImputer(TransformerMixin):
 
     def __init__(self):
-        """Impute missing values.
+        """
+        Impute missing values.
 
         Columns of dtype object are imputed with the most frequent value
         in column.
