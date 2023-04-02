@@ -7,15 +7,12 @@ from src.impute import DataFrameImputer
 from src.read import read_parquet
 
 
-def knn(train_X, train_y, test_X, test_y, k):
+def knn(train_X, train_y, k):
     # train a model
-    knn = KNeighborsClassifier(n_neighbors=k, weights='distance')
-    knn.fit(train_X, train_y)
+    clf = KNeighborsClassifier(n_neighbors=k, weights='distance')
+    clf.fit(train_X, train_y)
 
-    # evaluate the model
-    score = knn.score(test_X, test_y)
-    print(f'Accuracy: {score}')
-    return score
+    return clf
 
 
 if __name__ == '__main__':
@@ -42,4 +39,4 @@ if __name__ == '__main__':
 
     # apply the knn model
     for k in range(1, 20):
-        knn(train_X, train_y, test_X, test_y, k=k)
+        knn(train_X, train_y, test_X)

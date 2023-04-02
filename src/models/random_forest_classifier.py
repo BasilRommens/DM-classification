@@ -1,15 +1,15 @@
-from sklearn.naive_bayes import CategoricalNB
+from sklearn.ensemble import RandomForestClassifier
 
 from src.clean import change_class, remove_rowid
 from src.dataset_split import get_stratified_split
-from src.encode import label_encode, dummify
+from src.encode import dummify
 from src.impute import DataFrameImputer
 from src.read import read_parquet
 
 
-def naive_bayes(train_X, train_y):
+def random_forest(train_X, train_y):
     # train a model
-    clf = CategoricalNB()
+    clf = RandomForestClassifier()
     clf.fit(train_X, train_y)
 
     return clf
@@ -32,10 +32,10 @@ if __name__ == '__main__':
     df = change_class(df)
 
     # label encode the dataframe
-    df = label_encode(df)
+    df = dummify(df)
 
     # create a train and test set
     train_X, test_X, train_y, test_y = get_stratified_split(df)
 
     # apply the naive bayes model
-    naive_bayes(train_X, train_y)
+    random_forest(train_X, train_y)

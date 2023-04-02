@@ -7,15 +7,12 @@ from src.impute import DataFrameImputer
 from src.read import read_parquet
 
 
-def decision_tree(train_X, train_y, test_X, test_y):
+def decision_tree(train_X, train_y):
     # train a model
     clf = DecisionTreeClassifier()
     clf.fit(train_X, train_y)
 
-    # evaluate the model
-    score = clf.score(test_X, test_y)
-    print(f'Accuracy: {score}')
-    return score
+    return clf
 
 
 if __name__ == '__main__':
