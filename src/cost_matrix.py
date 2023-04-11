@@ -7,6 +7,3 @@ def get_cost_matrix():
         [0, -0.1 * 980 + 10]
     ])
 
-
-if __name__ == '__main__':
-    pass
