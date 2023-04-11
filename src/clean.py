@@ -1,4 +1,3 @@
-from src.impute import DataFrameImputer
 from src.read import read_parquet
 
 
@@ -27,4 +26,3 @@ if __name__ == '__main__':
     fname = 'existing-customers.parquet'
     df = read_parquet(path + fname)
     df = remove_rowid(df)
-    df = DataFrameImputer().fit_transform(df)
