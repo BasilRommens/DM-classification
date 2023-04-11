@@ -1,5 +1,3 @@
-from functools import lru_cache
-
 import lightgbm as lgb
 import numpy as np
 import pandas as pd
@@ -13,7 +11,7 @@ from src.impute import impute_decision_tree
 from src.read import read_parquet
 
 
-def get_neighbor(state: tuple) -> tuple:
+def get_neighbor(state):
     neighbor = list(state)
     for i in range(len(state)):
         if type(neighbor[i]) == int:
@@ -26,15 +24,14 @@ def get_neighbor(state: tuple) -> tuple:
     return tuple(neighbor)
 
 
-def get_model_from_state(state: tuple) -> lgb.LGBMClassifier:
+def get_model_from_state(state) -> lgb.LGBMClassifier:
     model = lgb.LGBMClassifier(learning_rate=state[0], max_depth=state[1],
                                num_leaves=state[2], feature_fraction=state[3],
                                subsample=state[4], is_unbalance=True)
     return model
 
 
-@lru_cache(maxsize=3)
-def get_cost(state: tuple, split):
+def get_cost(state, split, df):
     costs = list()
 
     # get the train and test set indices
@@ -54,20 +51,20 @@ def get_cost(state: tuple, split):
     return np.mean(costs)
 
 
-def simulated_annealing(initial_state, split) -> tuple:
+def simulated_annealing(initial_state, split, df) -> tuple:
     initial_temp = 90
     final_temp = .1
     alpha = 0.95
     current_temp = initial_temp
     current_state = initial_state
     solution = current_state
-    best_cost = get_cost(solution, split)
+    best_cost = get_cost(solution, split, df)
     best_solution = solution
 
     while current_temp > final_temp:
         neighbor = get_neighbor(current_state)
-        current_state_cost = get_cost(current_state, split)
-        neighbor_cost = get_cost(neighbor, split)
+        current_state_cost = get_cost(current_state, split,df )
+        neighbor_cost = get_cost(neighbor, split,df )
         cost_diff = current_state_cost - neighbor_cost
         # if the current state cost is lower than the best state cost, update
         # the best state and its cost
@@ -111,7 +108,7 @@ if __name__ == '__main__':
     df = pd.concat([true_train_X, true_train_y], axis=1)
     split = list(get_stratified_kfold_split(df))
 
-    state = simulated_annealing(initial_state=(.4, 15, 20, .8, .2), split=split)
+    state = simulated_annealing(initial_state=(.4, 15, 20, .8, .2), split=split, df=df)
     print(state)
     model = get_model_from_state(state)
     model.fit(true_train_X, true_train_y)

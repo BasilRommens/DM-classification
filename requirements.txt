@@ -5,3 +5,4 @@ fastparquet
 scikit-learn
 matplotlib
 seaborn
+jupyter
