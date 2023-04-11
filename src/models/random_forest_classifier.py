@@ -1,11 +1,5 @@
 from sklearn.ensemble import RandomForestClassifier
 
-from src.clean import change_class, remove_rowid
-from src.dataset_split import get_stratified_split
-from src.encode import dummify
-from src.impute import DataFrameImputer
-from src.read import read_parquet
-
 
 def random_forest(train_X, train_y):
     # train a model
@@ -16,6 +10,12 @@ def random_forest(train_X, train_y):
 
 
 if __name__ == '__main__':
+    from src.clean import change_class, remove_rowid
+    from src.dataset_split import get_stratified_split
+    from src.encode import dummify
+    from src.impute import impute_decision_tree
+    from src.read import read_parquet
+
     path = 'data/'
     fname = 'existing-customers.parquet'
 
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     df = remove_rowid(df)
 
     # impute the missing values
-    df = DataFrameImputer().fit_transform(df)
+    df = impute_decision_tree(df)
 
     # change the class column to a binary column
     df = change_class(df)

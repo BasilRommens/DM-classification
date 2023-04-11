@@ -1,11 +1,5 @@
 from sklearn.tree import DecisionTreeClassifier
 
-from src.clean import change_class, remove_rowid
-from src.encode import dummify
-from src.dataset_split import get_stratified_split
-from src.impute import DataFrameImputer
-from src.read import read_parquet
-
 
 def decision_tree(train_X, train_y):
     # train a model
@@ -16,6 +10,13 @@ def decision_tree(train_X, train_y):
 
 
 if __name__ == '__main__':
+    from src.clean import change_class, remove_rowid
+    from src.encode import dummify
+    from src.dataset_split import get_stratified_split
+    from src.impute import DataFrameImputer
+    from src.read import read_parquet
+    from src.evaluation import evaluate
+
     path = 'data/'
     fname = 'existing-customers.parquet'
 
@@ -38,4 +39,7 @@ if __name__ == '__main__':
     train_X, test_X, train_y, test_y = get_stratified_split(df)
 
     # apply the decision tree model
-    decision_tree(train_X, train_y, test_X, test_y)
+    model = decision_tree(train_X, train_y)
+
+    # evaluate the model
+    evaluate(model, test_X, test_y)

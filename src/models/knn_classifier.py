@@ -1,11 +1,5 @@
 from sklearn.neighbors import KNeighborsClassifier
 
-from src.clean import remove_rowid, change_class
-from src.dataset_split import get_stratified_split
-from src.encode import dummify
-from src.impute import DataFrameImputer
-from src.read import read_parquet
-
 
 def knn(train_X, train_y, k):
     # train a model
@@ -16,6 +10,12 @@ def knn(train_X, train_y, k):
 
 
 if __name__ == '__main__':
+    from src.clean import remove_rowid, change_class
+    from src.dataset_split import get_stratified_split
+    from src.encode import dummify
+    from src.impute import impute_decision_tree
+    from src.read import read_parquet
+
     path = 'data/'
     fname = 'existing-customers.parquet'
 
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     df = remove_rowid(df)
 
     # impute the missing values
-    df = DataFrameImputer().fit_transform(df)
+    df = impute_decision_tree(df)
 
     # change the class column to a binary column
     df = change_class(df)
