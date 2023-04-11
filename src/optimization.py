@@ -34,7 +34,7 @@ def get_model_from_state(state: tuple) -> lgb.LGBMClassifier:
 
 
 @lru_cache(maxsize=3)
-def get_cost(state: tuple):
+def get_cost(state: tuple, split):
     costs = list()
 
     # get the train and test set indices
@@ -54,21 +54,20 @@ def get_cost(state: tuple):
     return np.mean(costs)
 
 
-def simulated_annealing(initial_state) -> tuple:
+def simulated_annealing(initial_state, split) -> tuple:
     initial_temp = 90
     final_temp = .1
     alpha = 0.95
     current_temp = initial_temp
     current_state = initial_state
     solution = current_state
-    best_cost = get_cost(solution)
+    best_cost = get_cost(solution, split)
     best_solution = solution
 
     while current_temp > final_temp:
         neighbor = get_neighbor(current_state)
-        current_state_cost = get_cost(current_state)
-        neighbor_cost = get_cost(neighbor)
-        print(current_state_cost, neighbor_cost)
+        current_state_cost = get_cost(current_state, split)
+        neighbor_cost = get_cost(neighbor, split)
         cost_diff = current_state_cost - neighbor_cost
         # if the current state cost is lower than the best state cost, update
         # the best state and its cost
@@ -112,7 +111,7 @@ if __name__ == '__main__':
     df = pd.concat([true_train_X, true_train_y], axis=1)
     split = list(get_stratified_kfold_split(df))
 
-    state = simulated_annealing(initial_state=(.4, 15, 20, .8, .2))
+    state = simulated_annealing(initial_state=(.4, 15, 20, .8, .2), split=split)
     print(state)
     model = get_model_from_state(state)
     model.fit(true_train_X, true_train_y)
